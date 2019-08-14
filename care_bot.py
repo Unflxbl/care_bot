@@ -9,5 +9,5 @@ client = slack.WebClient(token="xoxb-714578520370-719690847425-oB0mKbJGvWejGlGey
 
 client.chat_postMessage(
   channel="general",
-  text="Настюшка = котка :heart:"
+  text="Test message"
 )
