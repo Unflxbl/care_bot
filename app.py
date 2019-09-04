@@ -1,5 +1,4 @@
 import json
-import re
 from flask import Flask, request, make_response
 from slackeventsapi import SlackEventAdapter
 from care_bot import Bot
@@ -7,57 +6,156 @@ from slack import WebClient
 
 app = Flask(__name__)
 careBot = Bot()
-
-
-@app.route("/index", methods=["GET"])
-def index():
-    return "It Works!"
-
-
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
+# Указываем токен
+client = WebClient("xoxb-714578520370-719690847425-c1PlhhBPjqPnK65gK87m9P9T")
 
-client = WebClient("insert token")
+# Здесь сохраняем юзеров и их прогресс
+users = {}
 
-"""
-
-Пока что это вообще не робит
-
-@slack_events_adapter.on("message")
-def event_handler(event_type, slack_event):
-    if event_type == "message":
-        # В переменную записываем текст из сообщение пользователя
-        users_text = slack_event["text"]
-        # В переменную записываем упоминание бота из текста пользователя, если оно есть
-        bot_mention_match = re.search(careBot.user_id, users_text)
-        # В переменную записываем было ли написано 'hello' пользователем в его сообщении
-        hello_match = re.search('hello', users_text)
-        if hello_match and bot_mention_match:
-            return careBot.say_hello()
-    return "No event handler found for %s type events" % event_type
-"""
-
-
-@slack_events_adapter.on("reaction_added")
-def reaction_added(event_data):
-    emoji = event_data["event"]["reaction"]
-    print(emoji)
-
-
+# Верификация URL для Events
 @app.route("/slack/events", methods=["GET", "POST"])
 def hears():
-    # Понять что тут происходит
     response = json.loads(request.data)
-    # Верификация URL
     if "challenge" in response:
         return make_response(response["challenge"], 200, {"content_type": "application/json"})
-""""# Обработка событий из слака
-    if "event" in response:
-        event_type = response["event"]["type"]
-        slack_event = response["event"]
-        event_handler(event_type, slack_event)
-        return make_response("Event HANDLED.", 200, )
-    return make_response('Something went wrong :(', 404, {'X-Slack-No-Retry': 1})
-"""
+
+
+# Используя SlackEvent мы определяем сообщение, которое пользователь пишет боту и предлагаем начать обучение
+@slack_events_adapter.on("message")
+def handle_message(event_data):
+    print(event_data)
+    if event_data["event"]["type"] == 'message' and event_data["event"]["channel"] == 'DMDTAU58X' and event_data["event"]["text"] == 'Привет!'and event_data["event"]["user"] == 'UM0H0FB6E':
+        # Записываем юзера, который обращается к боту впервые.
+        # Здесь сделаем проверку на то, какой юзер обращается и на каком он этапе обучения
+        # После этой проверки выдаем ему небольшой текст и предлагаем ему продолжить с того места где он остановился
+        #users[event_data["event"]["user"]['id']] = ()
+        client.chat_postMessage(channel='DMDTAU58X', text="И тебе привет!", blocks=[
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Привет! Я Care Bot - бот для помощи тебе в прохождении плана обучения.\nТебе предстоит многое узнать, но не пугайся, все начинается с малого! \n Удачи!"
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEZbsTYd3dgUstbiho2zY1GI7yJoQ0XMGH7RjMFbJpUT6shh0G",
+                    "alt_text": "palm tree"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Если ты готов начать учиться, нажми кнопку *Поехали!* и начинай двигаться по плану "
+                            "обучения. "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Поехали!",
+
+                    },
+                    "value": "click_me_123",
+                    "action_id": "a1"
+                }
+            }
+        ])
+
+
+# Обработчик action кнопок
+@app.route("/slack/buttons", methods=["POST", "GET"])
+def message_actions():
+    form_json = json.loads(request.form["payload"])
+    print(form_json)
+    # Получаем айди экшн батона из пришедшего запроса. Надо узнать другой способ получения айди или привести все
+    # формы к одному виду
+    action_id = form_json['message']['blocks'][3]['accessory']['action_id']
+    if action_id == 'a1':
+        #users[form_json["user"]].append('action_id')
+        #if user
+        user_check = form_json["user"]['id']
+        print(user_check)
+        if user_check in users:
+            print('ok')
+        print(users)
+        client.chat_postMessage(channel='DMDTAU58X', text="Идем дальше!", blocks=[
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Знакомство с офисом и коллегами*\n *Корпортал, Helpscout, Gmail*"
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": "https://i.playground.ru/i/pix/351851/image.jpg",
+                    "alt_text": "alpaca"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Для начала работы зайди на Gmail в https://mail.google.com c твоей новой рабочей "
+                            "почтой xxxxxxxx@elama.ru "
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Зарегистрируйся на elama.ru с новой рабочей почтой xxxxxxxx@elama.ru"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Проверь, что тебе пришло приглашение в Gmail для доступа в почтовый сервис Helpscout"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Зайди в Корпортал http://corportal.trinet.ru под доступами с листа у компьютера -  "
+                            "портал, в котором нужно отмечать рабочее время "
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Ознакомился? Идем дальше :smile: "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Дальше"
+                    },
+                    "value": "click_me_123",
+                    "action_id": "a2"
+                }
+            }
+        ])
+
 
 if __name__ == '__main__':
     app.run(debug=True)
