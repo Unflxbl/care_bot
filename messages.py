@@ -1,4 +1,4 @@
-users = {'UM0H0FB6E': ()}
+users = {'UM0H0FB6E': []}
 action_id = 'a1'
 list = users['UM0H0FB6E']
 list.append(action_id)

@@ -8,7 +8,7 @@ app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен
-client = WebClient("xoxb-714578520370-719690847425-tiwwR2VvKwIkm8cw8y0PqQ62")
+client = WebClient("xoxb-714578520370-719690847425-FrrhGzlmUOyWrbE4ZHRKgHSr")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -29,9 +29,9 @@ def handle_message(event_data):
         # Здесь сделаем проверку на то, какой юзер обращается и на каком он этапе обучения
         # После этой проверки выдаем ему небольшой текст и предлагаем ему продолжить с того места где он остановился
         user_check = event_data["event"]["user"]
-        users[user_check] = ()
-        print(users)
-        #print(user_check)
+        print(user_check)
+        users[user_check] = []
+        #print(users)
         client.chat_postMessage(channel='DMDTAU58X', text="И тебе привет!", blocks=[
             {
                 "type": "divider"
@@ -81,7 +81,7 @@ def message_actions():
     # формы к одному виду
     action_id = form_json['message']['blocks'][3]['accessory']['action_id']
     if action_id == 'a1':
-        print(users)
+        users['UM0H0FB6E'].append(action_id)
         client.chat_postMessage(channel='DMDTAU58X', text="Идем дальше!", blocks=[
             {
                 "type": "divider"
@@ -151,7 +151,8 @@ def message_actions():
                 }
             }
         ])
-
+    print(users)
+    return users
 
 if __name__ == '__main__':
     app.run(debug=True)
