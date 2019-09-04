@@ -8,7 +8,7 @@ app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен
-client = WebClient("xoxb-714578520370-719690847425-c1PlhhBPjqPnK65gK87m9P9T")
+client = WebClient("xoxb-714578520370-719690847425-tiwwR2VvKwIkm8cw8y0PqQ62")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -24,12 +24,14 @@ def hears():
 # Используя SlackEvent мы определяем сообщение, которое пользователь пишет боту и предлагаем начать обучение
 @slack_events_adapter.on("message")
 def handle_message(event_data):
-    print(event_data)
-    if event_data["event"]["type"] == 'message' and event_data["event"]["channel"] == 'DMDTAU58X' and event_data["event"]["text"] == 'Привет!'and event_data["event"]["user"] == 'UM0H0FB6E':
+    if event_data["event"]["type"] == 'message' and event_data["event"]["channel"] == 'DMDTAU58X' and event_data["event"]["text"] == 'Привет!':#and not event_data["event"]["subtype"] == 'bot_message':
         # Записываем юзера, который обращается к боту впервые.
         # Здесь сделаем проверку на то, какой юзер обращается и на каком он этапе обучения
         # После этой проверки выдаем ему небольшой текст и предлагаем ему продолжить с того места где он остановился
-        #users[event_data["event"]["user"]['id']] = ()
+        user_check = event_data["event"]["user"]
+        users[user_check] = ()
+        print(users)
+        #print(user_check)
         client.chat_postMessage(channel='DMDTAU58X', text="И тебе привет!", blocks=[
             {
                 "type": "divider"
@@ -68,7 +70,7 @@ def handle_message(event_data):
                 }
             }
         ])
-
+    return users
 
 # Обработчик action кнопок
 @app.route("/slack/buttons", methods=["POST", "GET"])
@@ -79,12 +81,6 @@ def message_actions():
     # формы к одному виду
     action_id = form_json['message']['blocks'][3]['accessory']['action_id']
     if action_id == 'a1':
-        #users[form_json["user"]].append('action_id')
-        #if user
-        user_check = form_json["user"]['id']
-        print(user_check)
-        if user_check in users:
-            print('ok')
         print(users)
         client.chat_postMessage(channel='DMDTAU58X', text="Идем дальше!", blocks=[
             {
