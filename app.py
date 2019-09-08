@@ -8,7 +8,7 @@ app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен, его надо убрать в переменные окружения
-client = WebClient("xoxb-714578520370-719690847425-8Q8msONK6u9M5SYJ7nq2xANg")
+client = WebClient("xoxb-714578520370-719690847425-x5jTS3FpZdZF5tcCYQc5exSA")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -162,8 +162,7 @@ def handle_message(event_data):
 def message_actions():
     form_json = json.loads(request.form["payload"])
     print(form_json)
-    # Получаем айди экшн батона из пришедшего запроса. Надо узнать другой способ получения айди или привести все
-    # формы к одному виду
+    # Получаем айди экшн батона из пришедшего запроса.
     action_id = form_json['actions'][0]['action_id']
     timestamp = form_json['message']['ts']
     user_action = form_json['user']['id']
@@ -328,6 +327,69 @@ def message_actions():
                 }
             }
         ])
+    if action_id == 'a3':
+        users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel="DMDTAU58X", blocks=[
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Что такое еЛама* "
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": "https://trinixy.ru/pics5/20160411/alpaca_01.jpg",
+                    "alt_text": "alpaca"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Презентация \n https://docs.google.com/a/elama.ru/presentation/d/1AfvUvt2uKLA_m407vISm7WwPzhA9VyB-KGfjSTo4p-A/edit?usp=sharing "
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Статья \n http://help.elama.ru/hc/ru/articles/208045535"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Преимущства \n https://pl.elama.ru/advantages"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Пора двигаться дальше! "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Дальше"
+                    },
+                    "value": "click_me_123",
+                    "action_id": "a4"
+                }
+            }
+        ])
+
     print(users)
     return users
 
