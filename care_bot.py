@@ -19,10 +19,3 @@ class Bot(object):
         self.user_id = auth_response["bot"]["bot_user_id"]
         self.client = WebClient("xoxb-714578520370-719690847425-htjml7V6tIeI9njSBLQ0p9p0")
 
-    def say_hello(self, message):
-        channel = message["channel"]
-        hello_message = "I want to live! Please build me"
-        self.client.chat_postMessage(
-            channel=channel,
-            text=hello_message,
-        )

@@ -3,12 +3,13 @@ from flask import Flask, request, make_response
 from slackeventsapi import SlackEventAdapter
 from care_bot import Bot
 from slack import WebClient
+from messages import text_test
 
 app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен, его надо убрать в переменные окружения
-client = WebClient("xoxb-714578520370-719690847425-x5jTS3FpZdZF5tcCYQc5exSA")
+client = WebClient("xoxb-714578520370-719690847425-LqJQUWgRqMmsyA2FkEdM48Q9")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -30,14 +31,12 @@ def hears():
 @slack_events_adapter.on("message")
 def handle_message(event_data):
     # print(event_data)
-    # Здесь возникают ошибки, когда мы получаем ответ бота, потому что у него нет 'user' в event, но есть subtype
-    # Надо придумать как обрабатывать эти ошибки
+    # Здесь проверем тип сообщения, которе было написано в боте (это либо бот отвечает, либо пишет юзер)
     if 'subtype' in event_data['event']:
         print('Bot replied you')
     if 'user' in event_data['event']:
         user_call = event_data['event']['user']
         if user_call in users:
-            # print(users[user_call][-1])
             current_action = users[user_call][-1]
             # Здесь будет идти проверка последнего нажатого action баттона по айди, после чего мы отправляем это
             # сообщение повторно
@@ -115,7 +114,7 @@ def handle_message(event_data):
 
         else:
             users[user_call] = ['a0']
-            # print("Первое сообщение от бота")
+            # Первое сообщение юзера от бота, начинается трекаться прогресс
             client.chat_postMessage(channel='DMDTAU58X', text="И тебе привет!", blocks=[
                 {
                     "type": "divider"
@@ -172,6 +171,8 @@ def message_actions():
         # Здесь мы проверяем айди кнопки, после ее нажатия мы добавляем ее в список значения для ключа этого юзера,
         # после чего мы вызываем обновление сообщения до следующего во флоу
         users[user_action].append(action_id)
+        # Проверка импорта функции, возврающей значение для отправки мессаджей
+        client.chat_postMessage(channel='DMDTAU58X', text=text_test())
         client.chat_update(
             ts=timestamp,
             channel="DMDTAU58X",
@@ -387,9 +388,411 @@ def message_actions():
                     "value": "click_me_123",
                     "action_id": "a4"
                 }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Вернуться в лобби "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Лобби",
+                    },
+                    "value": "click_me_123",
+                    "action_id": "lobby"
+                }
             }
         ])
+    if action_id == 'a4':
+        # Здесь сделать проверку, есть ли этот айди в пройденных кнопках
+        users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel="DMDTAU58X", blocks=[
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*Кто и чем занимается в Службе Заботы* "
+                },
+                "accessory": {
+                    "type": "image",
+                    "image_url": "http://zhivotnue.ru/image/domashnie_zhivotnue/selskoxoz_zhivotnue/alpaka/1.jpg",
+                    "alt_text": "alpaca"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Служба Заботы: Кто? Что? Зачем?  \n https://drive.google.com/open?id=1bYKuWwbRDVFDTzmtSh5QO60urmaedtCfS97YHJhVez0"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Служба Заботы: Ху из Ху \n https://docs.google.com/presentation/d/1i8A4gF4penHI8IVBmC4CNIsJ5zRHedsFqKvXxiJBTXQ/edit#slide=id.g5a8b5a54b5_11_803"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": ":red_circle: Структура отдела \n https://miro.com/app/board/o9J_kxhclu8=/"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Пора двигаться дальше! "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Дальше"
+                    },
+                    "value": "click_me_123",
+                    "action_id": "a3"
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Вернуться в лобби "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Лобби",
+                    },
+                    "value": "click_me_123",
+                    "action_id": "lobby"
+                }
+            }
+        ])
+    if action_id == 'lobby':
+        progress = users[user_action][-1]
+        # print(progress)
+        if progress == 'a4' or progress == 'a3':
+            client.chat_update(ts=timestamp, channel="DMDTAU58X", blocks=[
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*План обучения Службы Заботы* "
+                    },
+                    "accessory": {
+                        "type": "image",
+                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsFnLIgHtbfIoBt5jTwpZLPmvWgBEXKLAuqZlrunstZHqjoijL",
+                        "alt_text": "alpaca"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Раздел 1: Знакомство "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s2"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Вернуться к обучению? "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Да!"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "a4"
+                    }
+                }
+            ])
 
+    if action_id == 's2':
+        progress = users[user_action][-1]
+        # print(progress)
+        if progress == 'a4' or progress == 'a3':
+            client.chat_update(ts=timestamp, channel="DMDTAU58X", blocks=[
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Раздел 1: Знакомство* "
+                    },
+                    "accessory": {
+                        "type": "image",
+                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsFnLIgHtbfIoBt5jTwpZLPmvWgBEXKLAuqZlrunstZHqjoijL",
+                        "alt_text": "alpaca"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Знакомство с офисом и коллегами.Корпортал, Helpscout, Slack, Gmail. Помощь еЛамы для Заботы в Helpscout Docs "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s3"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Про рабочий день, болезни, отпуск, регламенты работыs "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Что такое еЛама"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Кто и чем занимается в Службе Заботы еЛама"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Пора двигаться дальше! "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Дальше"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "a4"
+                    }
+                }
+            ])
+    if action_id == 's3':
+        progress = users[user_action][-1]
+        # print(progress)
+        if progress == 'a4' or progress == 'a3':
+            client.chat_update(ts=timestamp, channel="DMDTAU58X", blocks=[
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*Раздел 1: Знакомство* "
+                    },
+                    "accessory": {
+                        "type": "image",
+                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsFnLIgHtbfIoBt5jTwpZLPmvWgBEXKLAuqZlrunstZHqjoijL",
+                        "alt_text": "alpaca"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Знакомство с офисом и коллегами.Корпортал, Helpscout, Slack, Gmail. Помощь еЛамы для Заботы в Helpscout Docs "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s2"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":red_circle: Для начала работы зайди на Gmail в https://mail.google.com c твоей новой рабочей почтой xxxxxxxx@elama.ru "
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":red_circle: Зарегистрируйся на elama.ru с новой рабочей почтой xxxxxxxx@elama.ru"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":red_circle: Проверь, что тебе пришло приглашение в Gmail для доступа в почтовый сервис Helpscout"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": ":red_circle: Зайди в Корпортал http://corportal.trinet.ru под доступами с листа у компьютера - портал, в котором нужно отмечать рабочее время "
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Про рабочий день, болезни, отпуск, регламенты работыs "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Что такое еЛама"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Кто и чем занимается в Службе Заботы еЛама"
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Перейти"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "s1"
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Пора двигаться дальше! "
+                    },
+                    "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Дальше"
+                        },
+                        "value": "click_me_123",
+                        "action_id": "a4"
+                    }
+                }
+            ])
     print(users)
     return users
 
