@@ -50,6 +50,25 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
+                    "text": "Нажми на кнопку и ты сможешь посмотреть прогресс!"
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Вернуться"
+                    },
+                    "value": "click_me_123",
+                    "action_id": "s2"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
                     "text": "*Знакомство с офисом и коллегами*\n *Корпортал, Helpscout, Gmail*"
                 },
                 "accessory": {
@@ -65,7 +84,7 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Для начала работы зайди на Gmail в https://mail.google.com c твоей новой рабочей почтой xxxxxxxx@elama.ru "
+                    "text": "Для начала работы зайди на <https://mail.google.com|Gmail> c твоей новой рабочей почтой xxxxxxxx@elama.ru"
                 }
             },
             {
@@ -86,7 +105,7 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Зайди в Корпортал http://corportal.trinet.ru под доступами с листа у компьютера портал, в котором нужно отмечать рабочее время "
+                    "text": "Зайди в <http://corportal.trinet.ru|Корпортал> под доступами с листа у компьютера портал, в котором нужно отмечать рабочее время "
                 }
             },
             {
@@ -96,13 +115,13 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Ознакомился? Идем дальше! "
+                    "text": "Ознакомился? Идем дальше? "
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Дальше"
+                        "text": "Да!"
                     },
                     "value": "click_me_123",
                     "action_id": "a2"
@@ -110,26 +129,30 @@ def blocks(action_id):
             },
             {
                 "type": "divider"
+            }
+
+        ]
+    if action_id == 'a2':
+        block = [
+            {
+                "type": "divider"
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Перейти к плану обучения"
+                    "text": "Нажми на кнопку и ты сможешь посмотреть прогресс!"
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Перейти"
+                        "text": "Вернуться",
                     },
                     "value": "click_me_123",
-                    "action_id": "s2"
+                    "action_id": "lobby"
                 }
-            }
-        ]
-    if action_id == 'a2':
-        block = [
+            },
             {
                 "type": "divider"
             },
@@ -152,42 +175,42 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Рабочий день и обед \n https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98600428635ba8b27025 "
+                    "text": "<https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98600428635ba8b27025|Рабочий день и обед>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "График работы в отделе \n https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98e10428635ba8b2702b/"
+                    "text": "<https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98e10428635ba8b2702b|График работы в отделе>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Отпуск \n https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe983f2c7d3a2f9011a0e0/"
+                    "text": "<https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe983f2c7d3a2f9011a0e0|Отпуск>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Больничный\n https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98b50428635ba8b27028/ "
+                    "text": "<https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe98b50428635ba8b27028|Больничный>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Регламенты по дисциплине \n https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe9a4d2c7d3a2f9011a0f7/ "
+                    "text": "<https://secure.helpscout.net/docs/58c11eb8dd8c8e56bfa84fdf/article/5afe9a4d2c7d3a2f9011a0f7|Регламенты по дисциплине>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Памятка по приходу/уходу из офиса \n https://docs.google.com/document/d/1sa7LtuTWPPX8bx47LPaNoNLQmoAcVcPZrffda19NbTY/edit "
+                    "text": "<https://docs.google.com/document/d/1sa7LtuTWPPX8bx47LPaNoNLQmoAcVcPZrffda19NbTY/edit|Памятка по приходу/уходу из офиса>"
                 }
             },
             {
@@ -197,7 +220,7 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Если у тебя есть вопросы, пиши в Слаке в чатик для новых сотрудников.\n Чатик называется  #новенькие_забота "
+                    "text": "Если у тебя есть вопросы, пиши в Слаке в чатик для новых сотрудников.\n Чатик называется <elama.ru|#новенькие_забота>"
                 },
                 "accessory": {
                     "type": "button",
@@ -208,26 +231,29 @@ def blocks(action_id):
                     "value": "click_me_123",
                     "action_id": "a3"
                 }
+            }
+        ]
+    if action_id == 'a3':
+        block = [
+            {
+                "type": "divider"
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Перейти к плану обучения "
+                    "text": "Нажми на кнопку и ты сможешь посмотреть прогресс!"
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Перейти",
+                        "text": "Вернуться",
                     },
                     "value": "click_me_123",
                     "action_id": "lobby"
                 }
-            }
-        ]
-    if action_id == 'a3':
-        block = [
+            },
             {
                 "type": "divider"
             },
@@ -250,21 +276,21 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Презентация \n https://docs.google.com/a/elama.ru/presentation/d/1AfvUvt2uKLA_m407vISm7WwPzhA9VyB-KGfjSTo4p-A/edit?usp=sharing "
+                    "text": "<https://docs.google.com/a/elama.ru/presentation/d/1AfvUvt2uKLA_m407vISm7WwPzhA9VyB-KGfjSTo4p-A/edit?usp=sharing|Презентация>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Статья \n http://help.elama.ru/hc/ru/articles/208045535"
+                    "text": "<http://help.elama.ru/hc/ru/articles/208045535|Статья>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Преимущства \n https://pl.elama.ru/advantages"
+                    "text": "<https://pl.elama.ru/advantages|Преимущства>"
                 }
             },
             {
@@ -285,26 +311,29 @@ def blocks(action_id):
                     "value": "click_me_123",
                     "action_id": "a4"
                 }
+            }
+        ]
+    if action_id == 'a4':
+        block = [
+            {
+                "type": "divider"
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Перейти к плану обучения "
+                    "text": "Нажми на кнопку и ты сможешь посмотреть прогресс!"
                 },
                 "accessory": {
                     "type": "button",
                     "text": {
                         "type": "plain_text",
-                        "text": "Перейти",
+                        "text": "Вернуться!",
                     },
                     "value": "click_me_123",
                     "action_id": "lobby"
                 }
-            }
-        ]
-    if action_id == 'a4':
-        block = [
+            },
             {
                 "type": "divider"
             },
@@ -327,21 +356,21 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Служба Заботы: Кто? Что? Зачем?  \n https://drive.google.com/open?id=1bYKuWwbRDVFDTzmtSh5QO60urmaedtCfS97YHJhVez0"
+                    "text": "<https://drive.google.com/open?id=1bYKuWwbRDVFDTzmtSh5QO60urmaedtCfS97YHJhVez0|Служба Заботы: Кто? Что? Зачем?>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Служба Заботы: Ху из Ху \n https://docs.google.com/presentation/d/1i8A4gF4penHI8IVBmC4CNIsJ5zRHedsFqKvXxiJBTXQ/edit#slide=id.g5a8b5a54b5_11_803"
+                    "text": "<https://docs.google.com/presentation/d/1i8A4gF4penHI8IVBmC4CNIsJ5zRHedsFqKvXxiJBTXQ/edit#slide=id.g5a8b5a54b5_11_803|Служба Заботы: Ху из Ху>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Структура отдела \n https://miro.com/app/board/o9J_kxhclu8=/"
+                    "text": "<https://miro.com/app/board/o9J_kxhclu8=/|Структура отдела>"
                 }
             },
             {
@@ -361,22 +390,6 @@ def blocks(action_id):
                     },
                     "value": "click_me_123",
                     "action_id": "a3"
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "Перейти к плану обучения "
-                },
-                "accessory": {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Перейти",
-                    },
-                    "value": "click_me_123",
-                    "action_id": "lobby"
                 }
             }
         ]
@@ -584,7 +597,7 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Для начала работы зайди на Gmail в https://mail.google.com c твоей новой рабочей почтой xxxxxxxx@elama.ru "
+                    "text": "Для начала работы зайди на <https://mail.google.com|Gmail> c твоей новой рабочей почтой xxxxxxxx@elama.ru "
                 }
             },
             {
@@ -598,14 +611,14 @@ def blocks(action_id):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": ":red_circle: Проверь, что тебе пришло приглашение в Gmail для доступа в почтовый сервис Helpscout"
+                    "text": "Проверь, что тебе пришло приглашение в <https://mail.google.com|Gmail> для доступа в почтовый сервис <secure.helpscout.com|Helpscout>"
                 }
             },
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Зайди в Корпортал http://corportal.trinet.ru под доступами с листа у компьютера - портал, в котором нужно отмечать рабочее время "
+                    "text": "Зайди в <http://corportal.trinet.ru|Корпортал> под доступами с листа у компьютера - портал, в котором нужно отмечать рабочее время "
                 }
             },
             {
