@@ -2,14 +2,15 @@ import json
 from flask import Flask, request, make_response
 from slackeventsapi import SlackEventAdapter
 from care_bot import Bot
-from slack import WebClient
+from slack.web.client import WebClient
 from messages import blocks, block_greeting
+from messages_2 import messages
 
 app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен, его надо убрать в переменные окружения
-client = WebClient("xoxb-714578520370-719690847425-7dyEaXxYNZCLzlUE2y8l4tAK")
+client = WebClient("xoxb-714578520370-719690847425-HpJytA8zwrchq5Fm5m5NNoAK")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -62,13 +63,18 @@ def message_actions():
     print(timestamp)
     print(user_action)
 
-    # Первый блок - Знакомство
-    if action_id == 'a1':
+    # Первый блок - меню
+    if action_id == 'start':
         # Здесь мы проверяем айди кнопки, после ее нажатия мы добавляем ее в список значения для ключа этого юзера,
         # после чего мы вызываем обновление сообщения до следующего во флоу
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
         # Проверка импорта функции, возврающей значение для отправки мессаджей
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a1':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+            print(blocks(action_id))
         client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
     if action_id == 'a2':
         if action_id not in users[user_action]:
@@ -83,23 +89,47 @@ def message_actions():
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
         client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a5':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a6':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a7':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a8':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a9':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a10':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a11':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a12':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a13':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+    if action_id == 'a14':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
 
-    if action_id == 'lobby':
-        progress = users[user_action][-1]
-        # print(progress)
-        if progress == 'a4' or progress == 'a3':
-            client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
-
-    if action_id == 's2':
-        progress = users[user_action][-1]
-        # print(progress)
-        if progress == 'a4' or progress == 'a3':
-            client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
-    if action_id == 's3':
-        progress = users[user_action][-1]
-        # print(progress)
-        if progress == 'a4' or progress == 'a3':
-            client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
     print(users)
     return users
 
