@@ -4,7 +4,7 @@ from slackeventsapi import SlackEventAdapter
 from care_bot import Bot
 from slack.web.client import WebClient
 from messages import blocks, block_greeting
-from messages_2_MVP import messages
+from messages_mvp import messages
 
 app = Flask(__name__)
 careBot = Bot()
