@@ -345,22 +345,6 @@ def blocks(action_id):
 		},
 		{
 			"type": "divider"
-		},
-		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "Вернуться к обучению? "
-			},
-			"accessory": {
-				"type": "button",
-				"text": {
-					"type": "plain_text",
-					"text": "Да!"
-				},
-				"value": "click_me_123",
-				"action_id": "a4"
-			}
 		}
 	]
     if action_id == 'a1':
@@ -2316,7 +2300,7 @@ def blocks(action_id):
 		}
 	]
     if action_id == 'a15':
-            block = [
+        	block = [
 		{
 			"type": "divider"
 		},
