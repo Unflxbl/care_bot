@@ -4,13 +4,13 @@ from slackeventsapi import SlackEventAdapter
 from care_bot import Bot
 from slack.web.client import WebClient
 from messages import blocks, block_greeting
-from messages_2 import messages
+from messages_2_MVP import messages
 
 app = Flask(__name__)
 careBot = Bot()
 slack_events_adapter = SlackEventAdapter(careBot.verification, "/slack/events", app)
 # Указываем токен, его надо убрать в переменные окружения
-client = WebClient("xoxb-714578520370-719690847425-HpJytA8zwrchq5Fm5m5NNoAK")
+client = WebClient("xoxb-714578520370-719690847425-tyAApHxaq7Fte00SygTwQ07K")
 
 # Здесь сохраняем юзеров и их прогресс
 users = {}
@@ -75,61 +75,68 @@ def message_actions():
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
             print(blocks(action_id))
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a2':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
             print(blocks(action_id))
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a3':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a4':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a5':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a6':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a7':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a8':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a9':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a10':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a11':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a12':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a13':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
     if action_id == 'a14':
         if action_id not in users[user_action]:
             users[user_action].append(action_id)
-        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks(action_id))
-
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
+    if action_id == 'a15':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=messages(action_id))
+    if action_id == 'back':
+        if action_id not in users[user_action]:
+            users[user_action].append(action_id)
+        client.chat_update(ts=timestamp, channel=bot_channel, blocks=blocks('start'))
     print(users)
     return users
 
